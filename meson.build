@@ -1,0 +1,101 @@
+project('thread',
+    ['c'],
+    version : '1.0',
+    license : 'MIT',
+    default_options : [
+        'c_std=gnu11',
+        'buildtype=release',
+        'wrap_mode=forcefallback'
+    ]
+)
+
+#===============================================================================
+# Compiler Settings
+#===============================================================================
+cc = meson.get_compiler('c')
+compiler_args = ['-DSDL_MAIN_HANDLED']
+
+#===============================================================================
+# Linker Settings
+#===============================================================================
+link_args = []
+if cc.get_id() == 'gcc' and get_option('buildtype') == 'release'
+    link_args += ['-static-libgcc']
+endif
+
+if host_machine.system() == 'darwin'
+    link_args += ['-framework', 'CoreServices', '-framework', 'Foundation']
+endif
+
+#===============================================================================
+# Dependencies
+#===============================================================================
+default_fallback_options = ['warning_level=0', 'werror=false']
+
+# Lua
+lua_dep = dependency('lua-5.4',
+    version: '>= 5.4',
+    fallback: ['lua', 'lua_dep'],
+    default_options: default_fallback_options + [
+        'default_library=static', 'line_editing=false', 'interpreter=false'
+    ]
+)
+
+# SDL2
+sdl_options = ['default_library=static']
+
+# we explicitly need these
+sdl_options += 'test=false'
+sdl_options += 'use_loadso=enabled'
+sdl_options += 'prefer_dlopen=true'
+sdl_options += 'use_video=enabled'
+sdl_options += 'use_atomic=enabled'
+sdl_options += 'use_threads=enabled'
+sdl_options += 'use_timers=enabled'
+# investigate if this is truly needed
+# Do not remove before https://github.com/libsdl-org/SDL/issues/5413 is released
+sdl_options += 'use_events=enabled'
+
+if host_machine.system() == 'darwin' or host_machine.system() == 'windows'
+    sdl_options += 'use_video_x11=disabled'
+    sdl_options += 'use_video_wayland=disabled'
+else
+    sdl_options += 'use_render=enabled'
+    sdl_options += 'use_video_x11=auto'
+    sdl_options += 'use_video_wayland=auto'
+endif
+
+# we leave this up to what the host system has except on windows
+if host_machine.system() != 'windows'
+    sdl_options += 'use_video_opengl=auto'
+    sdl_options += 'use_video_openglesv2=auto'
+else
+    sdl_options += 'use_video_opengl=disabled'
+    sdl_options += 'use_video_openglesv2=disabled'
+endif
+
+# we don't need these
+sdl_options += 'test=false'
+sdl_options += 'use_sensor=disabled'
+sdl_options += 'use_haptic=disabled'
+sdl_options += 'use_audio=disabled'
+sdl_options += 'use_cpuinfo=disabled'
+sdl_options += 'use_joystick=disabled'
+sdl_options += 'use_video_vulkan=disabled'
+sdl_options += 'use_video_offscreen=disabled'
+sdl_options += 'use_power=disabled'
+
+sdl_dep = dependency('sdl2',
+    fallback: ['sdl2', 'sdl2_dep'],
+    default_options: default_fallback_options + sdl_options
+)
+
+shared_library(
+    'thread',
+    ['src/thread.c', 'src/channel.c'],
+    name_prefix: '',
+    include_directories: 'src',
+    dependencies: [lua_dep, sdl_dep],
+    c_args: compiler_args,
+    link_args: link_args
+)
