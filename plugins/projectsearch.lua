@@ -11,8 +11,8 @@ local View = require "core.view"
 -- confused when using the same name inside the thread functions.
 ---@class threads : thread
 local threads = nil
-if pcall(require, "plugins.thread") then
-  threads = require "plugins.thread"
+if pcall(require, "libraries.thread") then
+  threads = require "libraries.thread"
 end
 
 config.plugins.projectsearch = common.merge({

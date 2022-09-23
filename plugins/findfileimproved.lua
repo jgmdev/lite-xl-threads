@@ -8,8 +8,8 @@ local StatusView = require "core.statusview"
 
 ---@type thread
 local thread = nil
-if pcall(require, "plugins.thread") then
-  thread = require "plugins.thread"
+if pcall(require, "libraries.thread") then
+  thread = require "libraries.thread"
 end
 
 local project_files = {}
@@ -82,7 +82,7 @@ end
 local function index_files_thread(pathsep, ignore_files)
   local commons = require "core.common"
 
-  local thread = require("thread")
+  local thread = require "thread"
 
   ---@type thread.Channel
   local input = thread.get_channel("findfileimproved_write")
