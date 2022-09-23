@@ -23,3 +23,12 @@ cp build/thread.so ~/.config/lite-xl/plugins/
 ## Api Docs
 
 You can view the API documention on the [docs](docs/thread.lua) subdirectory.
+
+## Plugins using threads for better performance:
+
+* [projectsearch.lua](plugins/projectsearch.lua) -
+  customized project search with multi threaded support for faster searching
+  in the magnitude of 5-10x better performance.
+* [findfileimproved.lua](plugins/findfileimproved.lua) -
+  overrides default lite-xl find file functionality and adds threading support
+  to scan a project files making it faster to search for files on big source trees.
