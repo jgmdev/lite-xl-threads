@@ -52,8 +52,6 @@ sdl_options += 'use_video=enabled'
 sdl_options += 'use_atomic=enabled'
 sdl_options += 'use_threads=enabled'
 sdl_options += 'use_timers=enabled'
-# investigate if this is truly needed
-# Do not remove before https://github.com/libsdl-org/SDL/issues/5413 is released
 sdl_options += 'use_events=enabled'
 
 if host_machine.system() == 'darwin' or host_machine.system() == 'windows'
@@ -90,10 +88,24 @@ sdl_dep = dependency('sdl2',
     default_options: default_fallback_options + sdl_options
 )
 
+#===============================================================================
+# Library Suffix
+#===============================================================================
+library_suffix = []
+
+# On macOS the default suffix is .dylib but on lite-xl we need .so
+if host_machine.system() == 'darwin'
+    library_suffix = 'so'
+endif
+
+#===============================================================================
+# Plugin Library
+#===============================================================================
 shared_library(
     'thread',
     ['src/thread.c', 'src/channel.c'],
     name_prefix: '',
+    name_suffix: library_suffix,
     include_directories: 'src',
     dependencies: [lua_dep, sdl_dep],
     c_args: compiler_args,
