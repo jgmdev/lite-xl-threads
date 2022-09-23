@@ -28,6 +28,23 @@
           "path": "init.x86-windows.dll"
         }
       ]
+    },
+    {
+      "name": "findfileimproved",
+      "version": "1.0",
+      "description": "Threaded project find files.",
+      "mod_version": "3",
+      "path": "plugins/findfileimproved.lua",
+      "dependencies": { "thread": { } }
+    },
+    {
+      "name": "projectsearch",
+      "version": "1.0",
+      "description": "Threaded project search with 5-10x better performance.",
+      "mod_version": "3",
+      "path": "plugins/projectsearch.lua",
+      "dependencies": { "thread": { } },
+      "provides": ["projectsearch"]
     }
   ]
 }
