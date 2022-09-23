@@ -3,14 +3,14 @@
     {
       "name": "thread",
       "version": "1.0",
+      "type": "library",
       "description": "Adds the missing threading functionality.",
-      "url": "https://github.com/jgmdev/lite-xl-threads",
       "mod_version": "3",
       "files": [
         {
           "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.0/thread.x86_64-linux.so",
           "arch": "x86_64-linux",
-          "path": "plugins"
+          "path": "init.x86_64-linux.so"
         }
       ]
     }
