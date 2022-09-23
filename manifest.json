@@ -13,6 +13,11 @@
           "path": "init.x86_64-linux.so"
         },
         {
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.0/thread.x86_64-darwin.so",
+          "arch": "x86_64-darwin",
+          "path": "init.x86_64-darwin.so"
+        },
+        {
           "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.0/thread.x86_64-windows.dll",
           "arch": "x86_64-windows",
           "path": "init.x86_64-windows.dll"
