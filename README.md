@@ -14,10 +14,10 @@ meson compile -C build
 
 ## Installation
 
-To install just copy the generated library file to your plugins directory:
+To install just copy the generated library file to your libraries directory:
 
 ```sh
-cp build/thread.so ~/.config/lite-xl/plugins/
+cp build/thread.so ~/.config/lite-xl/libraries/
 ```
 
 ## Api Docs
