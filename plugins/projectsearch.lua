@@ -102,7 +102,7 @@ local function files_search_threaded(
   ---@param text string The text or regex to search
   ---@param search_type '"plain"' | '"regex"' | '"fuzzy"'
   ---@return integer status_code
-  local function worker_find_in_file(tid, id, text, search_type)
+  local function worker_find_in_file(tid, id, project_dir, text, search_type)
     local core_common = require "core.common"
     tid = math.floor(tid)
     id = math.floor(id)
@@ -135,7 +135,7 @@ local function files_search_threaded(
           if s then
             local start_index = math.max(s - 80, 1)
             table.insert(results, {
-              filename,
+              core_common.relative_path(project_dir, filename),
               (start_index > 1 and "..." or "")
                 .. line:sub(start_index, 256 + start_index),
               n,
@@ -200,6 +200,7 @@ local function files_search_threaded(
       worker_find_in_file,
       tid,
       id,
+      project_dir,
       text,
       search_type
     ))
