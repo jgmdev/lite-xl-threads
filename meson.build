@@ -3,7 +3,7 @@ project('thread',
     version : '1.0',
     license : 'MIT',
     default_options : [
-        'c_std=gnu11',
+        'c_std=c11',
         'buildtype=release',
         'wrap_mode=forcefallback'
     ]
