@@ -90,7 +90,7 @@ end
 --unique thread id to allow multiple threaded searches to be launched
 local files_search_threaded_id = 0
 local function files_search_threaded(
-  tid, text, search_type, project_dir, pathsep, ignore_files, workers
+  tid, text, search_type, project_dir, path, pathsep, ignore_files, workers
 )
   local commons = require "core.common"
   tid = math.floor(tid)
@@ -175,7 +175,7 @@ local function files_search_threaded(
   -- the current dir/file index been searched is sent or "finished" on end
   local channel_status = thread.get_channel("projectsearch_status"..tid)
 
-  local root = project_dir
+  local root = path
   local count = 0
   local directories = {""}
   ---@type thread.Thread[]
@@ -316,6 +316,7 @@ function ResultsView:begin_search(path, text, search_type, fn)
         files_search_threaded_id,
         text,
         search_type,
+        core.project_dir,
         path or core.project_dir,
         PATHSEP,
         config.ignore_files,
