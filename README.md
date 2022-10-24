@@ -20,6 +20,13 @@ To install just copy the generated library file to your libraries directory:
 cp build/thread.so ~/.config/lite-xl/libraries/
 ```
 
+You can also install the Lua plugins to take advantage of the threads:
+
+```sh
+cp plugins/projectsearch.lua ~/.config/lite-xl/plugins/
+cp plugins/findfileimproved.lua ~/.config/lite-xl/plugins/
+```
+
 ## Api Docs
 
 You can view the API documention on the [docs](docs/thread.lua) subdirectory.
