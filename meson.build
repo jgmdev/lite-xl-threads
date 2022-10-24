@@ -30,22 +30,30 @@ endif
 #===============================================================================
 # Dependencies
 #===============================================================================
-default_fallback_options = ['warning_level=0', 'werror=false']
+default_fallback_options = [
+    'warning_level=0', 'werror=false', 'default_library=static'
+]
 
-# Lua
-lua_dep = dependency('lua-5.4',
-    version: '>= 5.4',
-    fallback: ['lua', 'lua_dep'],
-    default_options: default_fallback_options + [
-        'default_library=static', 'line_editing=false', 'interpreter=false'
-    ]
-)
+# Optional Lua
+use_lua = not get_option('use_lua').disabled()
+
+if use_lua
+    lua_dep = dependency('lua-5.4',
+        version: '>= 5.4',
+        fallback: ['lua', 'lua_dep'],
+        default_options: default_fallback_options + [
+            'line_editing=false', 'interpreter=false'
+        ]
+    )
+    compiler_args += '-DUSE_LUA'
+endif
 
 # SDL2
-sdl_options = ['default_library=static']
+sdl_options = []
 
 # we explicitly need these
 sdl_options += 'test=false'
+sdl_options += 'run_test=false'
 sdl_options += 'use_loadso=enabled'
 sdl_options += 'prefer_dlopen=true'
 sdl_options += 'use_video=enabled'
@@ -73,7 +81,6 @@ else
 endif
 
 # we don't need these
-sdl_options += 'test=false'
 sdl_options += 'use_sensor=disabled'
 sdl_options += 'use_haptic=disabled'
 sdl_options += 'use_audio=disabled'
@@ -87,6 +94,13 @@ sdl_dep = dependency('sdl2',
     fallback: ['sdl2', 'sdl2_dep'],
     default_options: default_fallback_options + sdl_options
 )
+
+# Dependencies list
+plugin_dependencies = [sdl_dep]
+
+if use_lua
+    plugin_dependencies += lua_dep
+endif
 
 #===============================================================================
 # Library Suffix
@@ -107,7 +121,7 @@ shared_library(
     name_prefix: '',
     name_suffix: library_suffix,
     include_directories: 'src',
-    dependencies: [lua_dep, sdl_dep],
+    dependencies: plugin_dependencies,
     c_args: compiler_args,
     link_args: link_args
 )

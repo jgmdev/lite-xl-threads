@@ -1,7 +1,12 @@
 #include <SDL.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
+
+#ifdef USE_LUA
+  #include <lua.h>
+  #include <lauxlib.h>
+  #include <lualib.h>
+#else
+  #include <lite_xl_plugin_api.h>
+#endif
 
 #define API_TYPE_CHANNEL "Channel"
 
