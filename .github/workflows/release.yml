@@ -122,6 +122,9 @@ jobs:
     name: macOS (x86_64)
     needs: release
     runs-on: macos-11
+    strategy:
+      matrix:
+        arch: [x86_64, arm64]
     env:
       CC: clang
       CXX: clang++
@@ -140,12 +143,17 @@ jobs:
           pip3 install meson
       - name: Build
         run: |
-          meson setup --wrap-mode forcefallback build
+          if [[ "${{ matrix.arch }}" == "arm64" ]]; then
+            meson setup --cross-file crossfiles/macos_arm64.conf \
+              --wrap-mode forcefallback -Duse_lua=disabled build
+          else
+            meson setup --wrap-mode forcefallback -Duse_lua=disabled build
+          fi
           meson compile -C build
-          mv build/thread.so thread.x86_64-darwin.so
+          mv build/thread.so thread.${{ matrix.arch }}-darwin.so
       - name: Upload
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.release.outputs.version }}
           draft: true
-          files: thread.x86_64-darwin.so
+          files: thread.${{ matrix.arch }}-darwin.so
