@@ -57,8 +57,9 @@ jobs:
           python-version: 3.9
       - name: Install Dependencies
         run: |
-           sudo apt -y install ninja-build wayland-protocols libsdl2-dev libfreetype6
-           pip3 install meson
+          sudo apt-get update
+          sudo apt -y install ninja-build wayland-protocols libsdl2-dev libfreetype6
+          pip3 install meson
       - name: Build
         run: |
           meson setup --wrap-mode forcefallback build && meson compile -C build
