@@ -47,11 +47,11 @@ local ResultsView = View:extend()
 
 ResultsView.context = "session"
 
-function ResultsView:new(path, text, type, fn)
+function ResultsView:new(path, text, type, insensitive, fn)
   ResultsView.super.new(self)
   self.scrollable = true
   self.brightness = 0
-  self:begin_search(path, text, type, fn)
+  self:begin_search(path, text, type, insensitive, fn)
 end
 
 
@@ -90,7 +90,7 @@ end
 --unique thread id to allow multiple threaded searches to be launched
 local files_search_threaded_id = 0
 local function files_search_threaded(
-  tid, text, search_type, project_dir, path, pathsep, ignore_files, workers
+  tid, text, search_type, insensitive, project_dir, path, pathsep, ignore_files, workers
 )
   local commons = require "core.common"
   tid = math.floor(tid)
@@ -102,7 +102,7 @@ local function files_search_threaded(
   ---@param text string The text or regex to search
   ---@param search_type '"plain"' | '"regex"' | '"fuzzy"'
   ---@return integer status_code
-  local function worker_find_in_file(tid, id, project_dir, text, search_type)
+  local function worker_find_in_file(tid, id, project_dir, text, search_type, insensitive)
     local core_common = require "core.common"
     tid = math.floor(tid)
     id = math.floor(id)
@@ -111,8 +111,12 @@ local function files_search_threaded(
 
     local re = nil
     if search_type == "regex" then
-      re = regex.compile(text, "i")
-    elseif search_type ~= "fuzzy" then
+      if insensitive then
+        re = regex.compile(text, "i")
+      else
+        re = regex.compile(text)
+      end
+    elseif search_type ~= "fuzzy" and insensitive then
       text = text:lower()
     end
 
@@ -130,7 +134,11 @@ local function files_search_threaded(
           elseif search_type == "fuzzy" then
             s = core_common.fuzzy_match(line, text) and 1
           else
-            s = line:lower():find(text, 1, true)
+            if insensitive then
+              s = line:lower():find(text, 1, true)
+            else
+              s = line:find(text, 1, true)
+            end
           end
           if s then
             local start_index = math.max(s - 80, 1)
@@ -202,7 +210,8 @@ local function files_search_threaded(
       id,
       project_dir,
       text,
-      search_type
+      search_type,
+      insensitive
     ))
   end
 
@@ -284,7 +293,7 @@ local function worker_threads_add_results(self, result_channels)
 end
 
 
-function ResultsView:begin_search(path, text, search_type, fn)
+function ResultsView:begin_search(path, text, search_type, insensitive, fn)
   self.search_args = { path, text, search_type, fn }
   self.results = {}
   self.last_file_idx = 1
@@ -316,6 +325,7 @@ function ResultsView:begin_search(path, text, search_type, fn)
         files_search_threaded_id,
         text,
         search_type,
+        insensitive,
         core.project_dir,
         path or core.project_dir,
         PATHSEP,
@@ -519,13 +529,14 @@ function ResultsView:draw()
 end
 
 
-local function begin_search(path, text, search_type, fn)
+local function begin_search(path, text, search_type, insensitive, fn)
   if text == "" then
     core.error("Expected non-empty string")
     return
   end
-  local rv = ResultsView(path, text, search_type, fn)
+  local rv = ResultsView(path, text, search_type, insensitive, fn)
   core.root_view:get_active_node_default():add_view(rv)
+  return rv
 end
 
 
@@ -549,6 +560,59 @@ local function normalize_path(path)
   return path
 end
 
+---@class plugins.projectsearch
+local projectsearch = {}
+
+---@type plugins.projectsearch.resultsview
+projectsearch.ResultsView = ResultsView
+
+---@param text string
+---@param path string
+---@param insensitive? boolean
+---@return plugins.projectsearch.resultsview?
+function projectsearch.search_plain(text, path, insensitive)
+  if insensitive then text = text:lower() end
+  return begin_search(path, text, "plain", insensitive, function(line_text)
+    if insensitive then
+      return line_text:lower():find(text, nil, true)
+    else
+      return line_text:find(text, nil, true)
+    end
+  end)
+end
+
+---@param text string
+---@param path string
+---@param insensitive? boolean
+---@return plugins.projectsearch.resultsview?
+function projectsearch.search_regex(text, path, insensitive)
+  local re, errmsg
+  if insensitive then
+    re, errmsg = regex.compile(text, "i")
+  else
+    re, errmsg = regex.compile(text)
+  end
+  if not re then core.log("%s", errmsg) return end
+  return begin_search(path, text, "regex", insensitive, function(line_text)
+    return regex.cmatch(re, line_text)
+  end)
+end
+
+---@param text string
+---@param path string
+---@param insensitive? boolean
+---@return plugins.projectsearch.resultsview?
+function projectsearch.search_fuzzy(text, path, insensitive)
+  if insensitive then text = text:lower() end
+  return begin_search(path, text, "fuzzy", insensitive, function(line_text)
+    if insensitive then
+      return common.fuzzy_match(line_text:lower(), text) and 1
+    else
+      return common.fuzzy_match(line_text, text) and 1
+    end
+  end)
+end
+
 
 command.add(nil, {
   ["project-search:find"] = function(path)
@@ -556,10 +620,7 @@ command.add(nil, {
       text = get_selected_text(),
       select_text = true,
       submit = function(text)
-        text = text:lower()
-        begin_search(path, text, "plain", function(line_text)
-          return line_text:lower():find(text, nil, true)
-        end)
+        projectsearch.search_plain(text, path, true)
       end
     })
   end,
@@ -567,10 +628,7 @@ command.add(nil, {
   ["project-search:find-regex"] = function(path)
     core.command_view:enter("Find Regex In " .. (normalize_path(path) or "Project"), {
       submit = function(text)
-        local re = regex.compile(text, "i")
-        begin_search(path, text, "regex", function(line_text)
-          return regex.cmatch(re, line_text)
-        end)
+        projectsearch.search_regex(text, path, true)
       end
     })
   end,
@@ -580,9 +638,7 @@ command.add(nil, {
       text = get_selected_text(),
       select_text = true,
       submit = function(text)
-        begin_search(path, text, "fuzzy", function(line_text)
-          return common.fuzzy_match(line_text, text) and 1
-        end)
+        projectsearch.search_fuzzy(text, path, true)
       end
     })
   end,
@@ -644,3 +700,6 @@ keymap.add {
   ["home"]               = "project-search:move-to-start-of-doc",
   ["end"]                = "project-search:move-to-end-of-doc"
 }
+
+
+return projectsearch
