@@ -1,10 +1,10 @@
 {
   "plugins": [
     {
-      "name": "thread",
+      "id": "thread",
       "version": "1.0",
       "type": "library",
-      "description": "Adds the missing threading functionality.",
+      "description": "Adds the missing multithreading functionality.",
       "mod_version": "3",
       "files": [
         {
@@ -40,7 +40,8 @@
       ]
     },
     {
-      "name": "findfileimproved",
+      "id": "findfileimproved",
+      "name": "Multithreaded Find File",
       "version": "1.0",
       "description": "Threaded project find files.",
       "mod_version": "3",
@@ -48,7 +49,8 @@
       "dependencies": { "thread": { } }
     },
     {
-      "name": "projectsearch",
+      "id": "projectsearch",
+      "name": "Multithreaded Project Search",
       "version": "1.2",
       "description": "Threaded project search with 5-10x better performance.",
       "mod_version": "3",
