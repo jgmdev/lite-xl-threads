@@ -2,7 +2,7 @@
   "plugins": [
     {
       "id": "thread",
-      "version": "1.0",
+      "version": "1.1",
       "type": "library",
       "description": "Adds the missing multithreading functionality.",
       "mod_version": "3",
