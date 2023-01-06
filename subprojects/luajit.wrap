@@ -1,0 +1,9 @@
+[wrap-file]
+directory = LuaJIT-8625eee71f16a3a780ec92bc303c17456efc7fb3
+source_url = https://github.com/LuaJIT/LuaJIT/archive/8625eee71f16a3a780ec92bc303c17456efc7fb3.zip
+source_filename = LuaJIT-8625eee71f16a3a780ec92bc303c17456efc7fb3.zip
+source_hash = 8b7da65c64156784c75092298f1783dd53709b0c5ee9c0dda64ca793b4968bc1
+patch_directory = luajit
+
+[provide]
+luajit = luajit_dep
