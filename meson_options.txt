@@ -1,5 +1,8 @@
 option(
     'use_lua',
     type : 'feature',
+    value : 'disabled',
     description : 'Link against Lua instead of using Lite XL plugin api'
 )
+
+option('jit', type : 'boolean', value : false, description: 'Use LuaJIT (experimental)')

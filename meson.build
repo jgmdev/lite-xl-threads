@@ -4,8 +4,7 @@ project('thread',
     license : 'MIT',
     default_options : [
         'c_std=c11',
-        'buildtype=release',
-        'wrap_mode=forcefallback'
+        'buildtype=release'
     ]
 )
 
@@ -37,7 +36,17 @@ default_fallback_options = [
 # Optional Lua
 use_lua = not get_option('use_lua').disabled()
 
-if use_lua
+# Use LuaJIT
+lua_jit_found = false
+if get_option('jit')
+    lua_dep = dependency('luajit', required : false,
+        default_options: default_fallback_options
+    )
+    use_lua = true
+    compiler_args += '-DLUA_JIT'
+    compiler_args += '-DUSE_LUA'
+# Use PUC Lua
+elif use_lua
     lua_dep = dependency('lua-5.4',
         version: '>= 5.4',
         fallback: ['lua', 'lua_dep'],
