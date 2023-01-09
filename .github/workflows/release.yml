@@ -68,6 +68,7 @@ jobs:
           pip3 install meson
       - name: Build
         run: |
+          ls /usr/bin
           if [[ "${{ matrix.arch }}" != "x86_64" ]]; then
             meson setup --cross-file crossfiles/linux_${{ matrix.arch }}.conf \
               --wrap-mode forcefallback -Dprefer_static=true \
