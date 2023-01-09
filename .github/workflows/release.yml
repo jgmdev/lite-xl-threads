@@ -46,6 +46,9 @@ jobs:
     name: Linux
     needs: release
     runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        arch: [x86_64, i686, aarch64]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -59,19 +62,27 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt -y install ninja-build wayland-protocols libsdl2-dev libfreetype6
+          if [[ "${{ matrix.arch }}" != "x86_64" ]]; then
+            sudo apt -y install gcc-${{ matrix.arch }}-linux-gnu
+          fi
           pip3 install meson
       - name: Build
         run: |
-          meson setup --wrap-mode forcefallback -Dprefer_static=true build
+          if [[ "${{ matrix.arch }}" != "x86_64" ]]; then
+            meson setup --cross-file crossfiles/linux_${{ matrix.arch }}.conf \
+              --wrap-mode forcefallback -Dprefer_static=true \
+              build
+          else
+            meson setup --wrap-mode forcefallback -Dprefer_static=true build
+          fi
           meson compile -C build
-          strip build/thread.so
-          mv build/thread.so thread.x86_64-linux.so
+          mv build/thread.so thread.${{ matrix.arch }}-linux.so
       - name: Upload
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.release.outputs.version }}
           draft: true
-          files: thread.x86_64-linux.so
+          files: thread.${{ matrix.arch }}-linux.so
 
   build_windows:
     name: Windows
