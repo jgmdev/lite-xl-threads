@@ -2,55 +2,55 @@
   "addons": [
     {
       "id": "thread",
-      "version": "1.2",
+      "version": "1.3",
       "type": "library",
       "description": "Adds the missing multithreading functionality.",
       "mod_version": "3",
       "files": [
         {
-          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.2/thread.x86_64-linux.so",
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.x86_64-linux.so",
           "arch": "x86_64-linux",
           "path": "init.x86_64-linux.so",
           "checksum": "SKIP"
         },
         {
-          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.2/thread.i686-linux.so",
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.i686-linux.so",
           "arch": "x86-linux",
           "path": "init.x86-linux.so",
           "checksum": "SKIP"
         },
         {
-          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.2/thread.aarch64-linux.so",
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.aarch64-linux.so",
           "arch": "aarch64-linux",
           "path": "init.aarch64-linux.so",
           "checksum": "SKIP"
         },
         {
-          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.2/thread.x86_64-linux.so",
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.x86_64-linux.so",
           "arch": "x86_64-linux",
           "path": "init.x86_64-linux.so",
           "checksum": "SKIP"
         },
         {
-          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.2/thread.x86_64-darwin.so",
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.x86_64-darwin.so",
           "arch": "x86_64-darwin",
           "path": "init.x86_64-darwin.so",
           "checksum": "SKIP"
         },
         {
-          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.2/thread.aarch64-darwin.so",
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.aarch64-darwin.so",
           "arch": "aarch64-darwin",
           "path": "init.aarch64-darwin.so",
           "checksum": "SKIP"
         },
         {
-          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.2/thread.x86_64-windows.dll",
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.x86_64-windows.dll",
           "arch": "x86_64-windows",
           "path": "init.x86_64-windows.dll",
           "checksum": "SKIP"
         },
         {
-          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.2/thread.x86-windows.dll",
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.x86-windows.dll",
           "arch": "x86-windows",
           "path": "init.x86-windows.dll",
           "checksum": "SKIP"

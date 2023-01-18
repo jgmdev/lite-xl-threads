@@ -1,10 +1,14 @@
 # Changes Log
 
-## [1.2] - 2022-01-09
+## [1.3] - 2023-01-18
+
+* Fix segfault caused by defective Lite XL plugin api header.
+
+## [1.2] - 2023-01-09
 
 * Added i686 and aarch64 linux targets.
 
-## [1.1] - 2022-01-06
+## [1.1] - 2023-01-06
 
 * Updated build system.
 

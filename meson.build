@@ -1,6 +1,6 @@
 project('thread',
     ['c'],
-    version : '1.0',
+    version : '1.3',
     license : 'MIT',
     default_options : [
         'c_std=c11',
