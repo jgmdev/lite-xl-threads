@@ -16,6 +16,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef USE_LUA
+  #define LITE_XL_PLUGIN_NON_ENTRYPOINT
+#endif
+
 #include "channel.h"
 
 #include <errno.h>
