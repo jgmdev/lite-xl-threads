@@ -88,6 +88,7 @@ sdl_options += 'use_joystick=disabled'
 sdl_options += 'use_video_vulkan=disabled'
 sdl_options += 'use_video_offscreen=disabled'
 sdl_options += 'use_power=disabled'
+sdl_options += 'use_hidapi=disabled'
 
 sdl_dep = dependency('sdl2',
     fallback: ['sdl2', 'sdl2_dep'],
