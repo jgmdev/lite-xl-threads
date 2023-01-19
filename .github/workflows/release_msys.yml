@@ -75,7 +75,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pacman --noconfirm -S \
-            ${MINGW_PACKAGE_PREFIX}-{gcc,meson,ninja,ntldd,pkg-config,mesa,freetype,pcre2,SDL2} unzip
+            ${MINGW_PACKAGE_PREFIX}-{ca-certificates,gcc,meson,ninja,ntldd,pkg-config,mesa,freetype,pcre2,SDL2} unzip
       - name: Build
         run: |
           meson setup --wrap-mode forcefallback -Dprefer_static=true build
