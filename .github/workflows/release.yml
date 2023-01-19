@@ -87,7 +87,7 @@ jobs:
   build_mingw:
     name: Windows
     needs: release
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         arch: [x86_64, i686]
@@ -103,7 +103,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt -y install ninja-build gcc-mingw-w64
+          sudo apt -y install ninja-build gcc-mingw-w64 wine wine64
           pip3 install meson
       - name: Build
         run: |
