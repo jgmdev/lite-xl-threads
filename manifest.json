@@ -50,7 +50,7 @@
           "checksum": "SKIP"
         },
         {
-          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.i686-windows.dll",
+          "url": "https://github.com/jgmdev/lite-xl-threads/releases/download/v1.3/thread.x86-windows.dll",
           "arch": "x86-windows",
           "path": "init.x86-windows.dll",
           "checksum": "SKIP"
