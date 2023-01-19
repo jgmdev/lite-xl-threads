@@ -17,6 +17,7 @@
 * Initial release ported from the [threading-support](https://github.com/jgmdev/lite-xl/tree/threading-support) branch.
 
 
+[1.3]: https://github.com/jgmdev/lite-xl-threads/releases/tag/v1.3
 [1.2]: https://github.com/jgmdev/lite-xl-threads/releases/tag/v1.2
 [1.1]: https://github.com/jgmdev/lite-xl-threads/releases/tag/v1.1
 [1.0]: https://github.com/jgmdev/lite-xl-threads/releases/tag/v1.0
